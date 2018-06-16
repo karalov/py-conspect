@@ -1,0 +1,38 @@
+git remote add origin https://github.com/karalov/py-conspect.git
+
+git config --global user.name "karalov"
+git config --global user.email "karalov.d@gmail.com"
+git config --global --list
+
+git config credential.helper store  (save credentials)
+
+git checkout master  (set branch)
+git pull origin master  (pull all from master)
+
+git remote -v  (list repositories)
+
+git checkout -b <branch>  - create a branch
+git diff
+
+git status
+git add <files>
+git commit -m "comment"
+git push <remote(origin)> <branch(master)>
+
+git clean -f  (delete all untracked changes)
+
+git reset . (unstage all not commited changes that were added)
+git reset HEAD~1  (undo last recent commit)
+
+-- Merge created branch with master branch 
+-- You need to be in the created branch.
+
+git checkout NAME-OF-BRANCH
+git merge master
+
+-- Merge master branch with created branch (you must be in master)
+
+git checkout master
+git merge NAME-OF-BRANCH
+
+git remote - list of remotes
