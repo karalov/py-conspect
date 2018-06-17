@@ -15,6 +15,8 @@ glob2.glob("*.txt")
 
 from datetime import datetime
 now=datetime.now()
+now.year
+now.hour
 delta=now - datetime(1972,7,11)
 delta.days
 datetime.strptime("1972-6-11","%Y-%m-%d")
@@ -67,3 +69,6 @@ ims=numpy.hstack((im_g,im_g))  # tsack horisontally  vstack - vertically hsplit,
 import folium
 map = folium.Map(location=[80,100])
 map.save("Map1.html")
+
+import time
+time.sleep(1)
