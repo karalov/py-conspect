@@ -72,3 +72,6 @@ map.save("Map1.html")
 
 import time
 time.sleep(1)
+
+from collections import OrderedDict
+dict=OrderedDict() # to make sure order will stay constant
