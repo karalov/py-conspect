@@ -74,16 +74,16 @@ package: git
 		   state=absent
 		when: ansible_on_family == "RedHat"
 
---- COMMAND MODULES --
- "shell":
-Use when no existing module or complex requirements (pipes, redirection, grep, awk)
- "command" 
-for simple shell commands, does not support pipes and redirection
- "raw"
-- bypasses the module subsystem
-- used when python in not installed on remote system (Windows)
-- systems with old python (<2.4)
-- network devices (routers, switches)
+#--- COMMAND MODULES --
+# "shell":
+#Use when no existing module or complex requirements (pipes, redirection, grep, awk)
+# "command" 
+#for simple shell commands, does not support pipes and redirection
+# "raw"
+#- bypasses the module subsystem
+#- used when python in not installed on remote system (Windows)
+#- systems with old python (<2.4)
+#- network devices (routers, switches)
 
 tasks:
   - name: see network configuration
@@ -106,3 +106,66 @@ tasks:
   - name: run the script
     raw: bash /home/ec2-user/Desktop/hello.py
  
+ 
+ #--- FILE MODULE -- 
+ - name: using file
+   hosts: all
+   gather_facts: False
+   tasks:
+     - name: create a directory
+       file:
+         path: /home/ec2-user/ansible
+         state: directory
+     - name: create a file
+       file:
+         path: /home/ec2-user/ansible/hello.txt
+         state: touch         
+      - name: create a symbolic link
+        file:
+          src: /home/ec2-user/ansible/hello.txt
+          dest: /home/ec2-user/ansible/hello.txt
+          state: link           
+      - name: delete all
+        file:
+          path: /home/ec2-user/ansible
+          state: absent
+# -- FILE MANIPULATIONS/UPDATES -- 
+- name: File operations
+  hosts: all
+  gather_facts: False
+  tasks:
+    - name: insert text in the end of the file
+      lineinfile:
+        path: /home/ec2-user/ansible/hello.txt
+        line: Hello mummy!
+    - name: insert text after specific line
+      lineinfile:
+        path: /home/ec2-user/ansible/hello.txt
+        line: I love you
+        insertafter: Hello mummy!
+    - name: insert block
+      blockinfile:
+        path: /home/ec2-user/ansible/hello.txt
+        block: |
+          Hello my dear friend!
+          I want you to be happy
+    - name: replace string 
+      replace:
+        path: /home/ec2-user/ansible/hello.txt
+        regexp: be happy
+        replace: help me
+
+# Repositories:
+# Debian: /etc/apt/sources.list
+# Custom repositories: /etc/apt/sourcses.list.d/docker.list
+# Yum (redHat)
+# /etc/yum.conf
+# Extra(custom) under /etc/yum.repos.d/<package>.repo
+
+- name: add docker repository
+  hosts: all
+  become: True
+  tasks:
+    - name: add docker repo ubuntu
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu
