@@ -1,0 +1,108 @@
+file with accounts (inventory)
+[redhat]
+karalov01 ansible_ssh_user=ec2-user
+karalov02 ansible_ssh_user=ec2-user
+[ubuntu]
+karalov03 ansible_ssh_user=ec2-user
+---
+#adhock:
+>ansible redhat -m ping -i inventory
+#Install a package
+>ansible ubuntu -m apt -a "name=git" -i inventory
+>ansible redhat -m yum -a "name=git" -i inventory
+#Run a bash command:
+                -m command -a "ls"
+#Copy a file
+				-m copy -a"src=inventory dest="ansible/"
+
+#playbooks
+ ---
+ - name: install git on Ubuntu
+   hosts: ubuntu
+   become: True
+   tasks:
+      - name: install git
+	    apt: name=git
+		
+- name: install git on redhat
+   hosts: redhat
+   become: True
+   vars:
+      package: git
+   tasks:
+      - name: install {{ package }}
+	    yum: name="{{ package }}" 
+		
+ansible-playbook myplaybook.yml -i inventory
+
+#variables.yml
+---
+package: git
+
+---
+- name: install {{ package }}
+   hosts: all
+   become: True
+   vars_files:
+     - variables.yml
+   tasks:
+      - name: update cache on Ubuntu
+	    apt:
+		  update_cache: True
+		when: ansible_os_family == "Debian"
+
+      - name: upgrade Ubuntu
+	    apt:
+		  upgrade: True
+		when: ansible_os_family == "Debian"
+		
+      - name: install {{ package }} on RedHat
+	    yum: name="{{ package }}" state=present
+		register: success
+		when: ansible_on_family == "RedHat"
+	  - debug: var=success
+		
+		
+      - name: install {{ package }} on Ubuntu
+	    apt: name="{{ package }}" state=present
+		when: ansible_on_family == "Ubuntu"
+		gather_facts: False
+		
+      - name: remove {{ package }} on RedHat
+	    yum: 
+		   name: "{{ package }}" 
+		   state=absent
+		when: ansible_on_family == "RedHat"
+
+--- COMMAND MODULES --
+ "shell":
+Use when no existing module or complex requirements (pipes, redirection, grep, awk)
+ "command" 
+for simple shell commands, does not support pipes and redirection
+ "raw"
+- bypasses the module subsystem
+- used when python in not installed on remote system (Windows)
+- systems with old python (<2.4)
+- network devices (routers, switches)
+
+tasks:
+  - name: see network configuration
+    shell: ifconfig | grep ens33
+    args:
+     executable: /bin/bash
+    register: net_config
+  - debug: var=net_config
+   
+  - name: copy custom script
+    copy:
+       src: hello.py
+       dest: ~/Desktop	   
+
+  - name: run the script
+    command: hello.py
+    args:
+       chdir: /home/ec2-user/Desktop
+
+  - name: run the script
+    raw: bash /home/ec2-user/Desktop/hello.py
+ 
