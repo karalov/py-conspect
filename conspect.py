@@ -75,3 +75,16 @@ time.sleep(1)
 
 from collections import OrderedDict
 dict=OrderedDict() # to make sure order will stay constant
+
+from itertools import groupby
+l="1222311"
+for k,c in groupby(l):
+  print(k,list(c))
+#1 ['1']
+#2 ['2', '2', '2']
+#3 ['3']
+#1 ['1', '1']
+
+l=[('a', 2), ('e', 3), ('c', 3), ('d', 1), ('b', 1)]
+sorted(l,key=lambda x: (-x[1],x[0]))
+#[('c', 3), ('e', 3), ('a', 2), ('b', 1), ('d', 1)] - first by number desc, then by letter asc (deflt)  
