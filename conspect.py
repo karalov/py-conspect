@@ -105,3 +105,29 @@ print(json.dumps(my_mapping, indent=4, sort_keys=True))
 # Note this only works with dicts containing
 # primitive types (check out the "pprint" module):
 >>> json.dumps({all: 'yup'})
+
+import re
+S="1qaz2wsx3edc4rfv5tgb6yhn7ujm8ik9ol0pQWERTYUIOPASDFGHJKLZXCVBNM"
+re.search("[a-z]+",S).group(0)  # display first occurence all lower letters from string
+qaz
+re.findall("[a-z]+",S)
+['qaz', 'wsx', 'edc', 'rfv', 'tgb', 'yhn', 'ujm', 'ik', 'ol', 'p']
+
+#Valid email addresses must follow these rules:
+#It must have the username@websitename.extension format type.
+#The username can only contain letters, digits, dashes and underscores.
+#The website name can only have letters and digits.
+#The maximum length of the extension is 3
+re.match("^[a-zA\-Z0-9_-]+@[a-zA-Z0-9]+\.[a-z]{1,3}$",s)
+
+#sorting by index
+order = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1357902468'
+print(*sorted(input(), key=order.index), sep='') # sort: first lower, then upper, then odd numbers, then even
+
+#Let's say you have to make a list of the squares of integers from  to  (both included).
+
+>> l = list(range(10))
+>> l = list(map(lambda x:x*x, l))
+#Now, you only require those elements that are greater than  but less than .
+
+>> l = list(filter(lambda x: x > 10 and x < 80, l))
