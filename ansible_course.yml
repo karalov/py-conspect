@@ -284,3 +284,17 @@ redhat_packages:
       dest: /etc/network/interfaces
     when: ansible_os_family == "Debian"
 
+# INCLUDE
+# main definitions( hosts, vars, become - in main yml, tasks in include yml files
+- name: Setup ELK stack
+  hosts: all
+  become: True
+  vars_files:
+    - variable.yml
+  tasks:
+    - include: install_docker.yml
+    - include: elk_stask.yml
+
+#AWX
+git clone https://github.com/ansible/awx
+
