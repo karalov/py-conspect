@@ -3,7 +3,7 @@ cd file with accounts (inventory)
 karalov01 ansible_ssh_user=ec2-user
 karalov02 ansible_ssh_user=ec2-user
 [ubuntu]
-karalov03 ansible_ssh_user=ec2-user
+karalov03 ansible_ssh_user=ec2-user ansible ssh_port=2222
 ---
 #adhock:
 >ansible redhat -m ping -i inventory
@@ -292,9 +292,126 @@ redhat_packages:
   vars_files:
     - variable.yml
   tasks:
-    - include: install_docker.yml
-    - include: elk_stask.yml
+    - include_tasks: install_docker.yml
+    - include_tasks: elk_stask.yml
 
+# ROLES
+dimitryk@dimitry:~/ansible$ mkdir roles
+dimitryk@dimitry:~/ansible$ cd roles
+dimitryk@dimitry:~/ansible/roles$ ansible-galaxy init docker
+dimitryk@dimitry:~/ansible/roles$ cd docker
+dimitryk@dimitry:~/ansible/roles/docker$ ls
+defaults  files  handlers  meta  README.md  tasks  templates  tests  vars
+
+# defaults: for default variables
+# vars: overwrite default vars
+# tasks: yml file with tasks list
+---
+- name: Setup ELK stack
+  hosts: all
+  become: true
+  roles:
+    - role: docker
+    - role: elkstack
+
+---
+- name: Build and deploy AWX
+  hosts: all
+  gather_facts: false
+  roles:
+    - { role: check_vars }
+    - { role: image_build, when: "dockerhub_base is not defined" }
+    - { role: image_push, when: "docker_registry is defined and dockerhub_base is not defined" }
+    - { role: kubernetes, when: "openshift_host is defined or kubernetes_context is defined" }
+    - { role: local_docker, when: "openshift_host is not defined and kubernetes_context is not defined" }
+
+
+# CHECK VARIABLES:
+#check_docker.yml
+---
+- name: postgres_data_dir should be defined
+  assert:
+    that:
+    - postgres_data_dir is defined and postgres_data_dir != ''
+    msg: "Set the value of 'postgres_data_dir' in the inventory file."
+  when: pg_hostname is not defined or pg_hostname == ''
+
+- name: host_port should be defined
+  assert:
+    that:
+    - host_port is defined and host_port != ''
+    msg: "Set the value of 'host_port' in the inventory file."
+
+#REGISTER
+tasks: 
+- name: Record Uptime
+  shell: /usr/bin/uptime
+  register: result
+
+- name: Display Uptime
+  debug: msg="{{ result.stdout }}"
+  
 #AWX
 git clone https://github.com/ansible/awx
 
+#JINJA2
+{% for switch ion config -%}
+hostname {{ switch.switch_hostname }}
+  {# "dictsort" automatically creates an iterator for us #}
+  {% for id,name in switch.vlans|dictsort %}
+       vlan {{ id }}
+       name {{ name }}
+   {% endfor }}
+{% endfor %}
+
+# config.yml :
+---
+- switch_hostname: sw01
+  vlans:
+    10: Management
+    20: vMotion
+    30: Server Network 1
+    40: Server Network 2
+
+- switch_hostname: sw02
+  vlans:
+    10: Management
+    20: vMotion
+    30: Server Network 1
+    40: Server Network 2
+
+- switch_hostname: sw03
+  vlans:
+    210: Marketing
+    220: Sales
+    230: Finance
+
+#include
+{% include "4-advobjects.j2" %}
+There were {{ config| length }} switches in this configuration.
+
+#inline vars
+{% set TESTVAR = config['message'] %}
+{{ TESTVAR }}
+{% set TESTVAR = 'Hello' %}
+{{ TESTVAR }}
+
+
+#dynamic var file, handlers using roles
+---
+- include_vars: "{{ ansible_os_family }}.yml"
+- name: Main routing config file
+  template: src={{ conftamplate }} dest={{ conffile }}
+  notify: Apply sysctl changes  # - will call handler with name Apply sysctl changes, only when success
+
+#Handler main.yml (under handlers folder)
+---
+- name: Apply sysctl changes
+  shell: sudo sysctl -p {{ conffile }}
+
+#Var files under vars folder
+#Debian.yml
+---
+conftemplate: 'roles/router/templates/sysctl.conf.j2'
+conffile: '/etc/sysctl.conf'
+testvar: 'Hello WOrld'

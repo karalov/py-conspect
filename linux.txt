@@ -1,0 +1,5 @@
+service httpd status
+service https start
+yum install httpd -y
+chkconfig httpd on  - to be started on boot
+

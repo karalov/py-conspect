@@ -1,0 +1,4 @@
+docker ps -a  # dicplay all existing containers
+docker exec -it aws_web /bin/bach # enter to container shell
+docker cp workspace/ awx_web:/var/lib/awx/projects/ #copy local file to docker container instance
+
