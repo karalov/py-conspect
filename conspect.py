@@ -131,3 +131,35 @@ print(*sorted(input(), key=order.index), sep='') # sort: first lower, then upper
 #Now, you only require those elements that are greater than  but less than .
 
 >> l = list(filter(lambda x: x > 10 and x < 80, l))
+
+#The reduce() function applies a function of two arguments cumulatively on a list of objects in succession from left to right to reduce it to one value. Say you have a list, say [1,2,3] and you have to find its sum.
+from functools import reduce
+>>> reduce(lambda x, y : x + y,[1,2,3])
+6
+#You can also define an initial value. If it is specified, the function will assume initial value as the value given, and then reduce. It is equivalent to adding the initial value at the beginning of the list. For example:
+
+>>> reduce(lambda x, y : x + y, [1,2,3], -3)
+3
+
+from fractions import Fractions
+result=Fraction(numerator,denominator)  # simplify fraction
+print(result.numerator, result.denominator)
+t = Fraction(*reduce(lambda x,y: (x[0]*y[0], x[1]*y[1]),fracs))
+#fracs: [[1,2],[3,4],[10,6]] calc product of fractions  1/2 * 3/4 * 10/6
+
+# Why Python Is Great:
+# Function argument unpacking
+
+def myfunc(x, y, z):
+    print(x, y, z)
+
+tuple_vec = (1, 0, 1)
+dict_vec = {'x': 1, 'y': 0, 'z': 1}
+
+>>> myfunc(*tuple_vec)
+1, 0, 1
+
+>>> myfunc(**dict_vec)
+1, 0, 1
+>>> myfunc(*dict_vec)
+x y z
