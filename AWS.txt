@@ -1,0 +1,35 @@
+ aws s3 cp --recursive s3://karalov . --region us-west-2
+check region:
+aws s3api get-bucket-location --bucket <BUCKET>
+to have access from ec2 instance to s3 of the same aws account, you should assign role with S3 access to the instance in EC2 instances dashboard
+
+EC2 METADATA
+curl http://169.254.169.254/latest/meta-data/
+ec2-user@karalov01:~>curl http://169.254.169.254/latest/meta-data/
+ami-id
+ami-launch-index
+ami-manifest-path
+block-device-mapping/
+hostname
+iam/
+instance-action
+instance-id
+instance-type
+local-hostname
+local-ipv4
+mac
+metrics/
+network/
+placement/
+profile
+public-hostname
+public-ipv4
+public-keys/
+reservation-id
+security-groups
+
+services/ec2-user@karalov01:~>curl http://169.254.169.254/latest/meta-data/public-ipv4
+18.191.226.229
+ec2-user@karalov01:~>curl http://169.254.169.254/latest/user-data/   - init bootstrap bash script that was added during instance creation.
+
+
