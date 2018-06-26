@@ -119,6 +119,18 @@ re.findall("[a-z]+",S)
 #The website name can only have letters and digits.
 #The maximum length of the extension is 3
 re.match("^[a-zA\-Z0-9_-]+@[a-zA-Z0-9]+\.[a-z]{1,3}$",s)
+#Squaring numbers
+def square(match):
+    number = int(match.group(0))
+    return str(number**2)
+
+print re.sub(r"\d+", square, "1 2 3 4 5 6 7 8 9")
+#1 4 9 16 25 36 49 64 81
+#r before string means to recognize "\" character as a regular character. r"\n" means two chars \ and n
+print re.sub("(<!--.*?-->)", "", html) #remove comment from html 
+#To replace string by another one use replace method of the string
+>>> "mama kaka lala".replace("a","###")
+'m###m### k###k### l###l###'
 
 #sorting by index
 order = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1357902468'
@@ -163,3 +175,13 @@ dict_vec = {'x': 1, 'y': 0, 'z': 1}
 1, 0, 1
 >>> myfunc(*dict_vec)
 x y z
+
+import uuid # generate unique ID. Different types (uuid1,uuid2,uuid3,uuid4)
+>>> str(uuid.uuid4())
+'e8f3076a-77e8-47d1-9c3f-ed6bc012bc93'
+
+# The "timeit" module lets you measure the execution
+# time of small bits of Python code
+>>> import timeit
+>>> timeit.timeit('"-".join(str(n) for n in range(100))',number=10000)
+0.3412662749997253
