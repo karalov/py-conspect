@@ -3,3 +3,7 @@ service https start
 yum install httpd -y
 chkconfig httpd on  - to be started on boot
 
+
+Ubuntu
+systemctl is-enabled rabbitmq-server  - check if enabled
+systemctl disable rabbitmq-server
