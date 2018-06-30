@@ -1,0 +1,14 @@
+git config --global user.name "karalov"
+git config --global user.email "karalov.d@gmail.com"
+
+git init
+git clone <repository>
+git add <file>
+git commit -m "message"
+git commit -a (all added files)
+git push origin master
+git status
+git remote add origin <server>
+git remote -v (list all servers)
+
+
