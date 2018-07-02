@@ -1,35 +1,12 @@
- aws s3 cp --recursive s3://karalov . --region us-west-2
-check region:
-aws s3api get-bucket-location --bucket <BUCKET>
-to have access from ec2 instance to s3 of the same aws account, you should assign role with S3 access to the instance in EC2 instances dashboard
-
-EC2 METADATA
-curl http://169.254.169.254/latest/meta-data/
-ec2-user@karalov01:~>curl http://169.254.169.254/latest/meta-data/
-ami-id
-ami-launch-index
-ami-manifest-path
-block-device-mapping/
-hostname
-iam/
-instance-action
-instance-id
-instance-type
-local-hostname
-local-ipv4
-mac
-metrics/
-network/
-placement/
-profile
-public-hostname
-public-ipv4
-public-keys/
-reservation-id
-security-groups
-
-services/ec2-user@karalov01:~>curl http://169.254.169.254/latest/meta-data/public-ipv4
-18.191.226.229
-ec2-user@karalov01:~>curl http://169.254.169.254/latest/user-data/   - init bootstrap bash script that was added during instance creation.
-
+Route53 Routing policies
+- simple
+   default routing policy when you create a new record set, This is the most commonly used when you have a single resource that perdorms a given function for your domain, for example, one web server that server content http://cocktails-r.us website
+- weighted
+    Let you split your traffic based on different weights assigned. For example, you can set 10% traffic to go to US-EAST and 90% to go to EU-WEST-1
+- latency
+    Latency based routing allows you to route your trafic based on the lowest network latency for your end user (ie which region will give them the fastest response time). To use latency-based routing you create a latency resource record set for the Amazon EC2 (or ELB) resource in each region that hosts your website, When Amazon Route 53 receives a query for your site, it selects the latency resource record set for the region that gives the user the lowest latency. Route 53 then responds with the value associated with that resource record set.
+- failower
+    Failover routing policies are used when you want to create an active/passive set up. For example you may want your primary site to be in EU-WEST-2 and your secondary DR site in SOUTHEAST-2. Route 53 will monitor the health of your primary site using a health check. A health check monitors the health of your end points.
+- geolocation
+   Geolocation routing lets you choose where your traffic will be sent based on the geographic location of your users( ie the location from which DNS queries originate). For example, you might want all queries from Europe to be routed to a fleet of EC2 instances that are specifically configured fo ryour European customers. These servers may have the local language of your European customers and all prices are displayed in Euros.
 
