@@ -185,3 +185,11 @@ import uuid # generate unique ID. Different types (uuid1,uuid2,uuid3,uuid4)
 >>> import timeit
 >>> timeit.timeit('"-".join(str(n) for n in range(100))',number=10000)
 0.3412662749997253
+
+Errors handling
+>>> while True:
+...     try:
+...         x = int(input("Please enter a number: "))
+...         break
+...     except ValueError:
+...         print("Oops!  That was no valid number.  Try again...")
