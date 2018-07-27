@@ -193,3 +193,111 @@ Errors handling
 ...         break
 ...     except ValueError:
 ...         print("Oops!  That was no valid number.  Try again...")
+
+import random
+random.randint(1,9)  - random integer from 1 to 9 (inclusive)
+
+# Because Python has first-class functions they can
+# be used to emulate switch/case statements
+
+def dispatch_if(operator, x, y):
+    if operator == 'add':
+        return x + y
+    elif operator == 'sub':
+        return x - y
+    elif operator == 'mul':
+        return x * y
+    elif operator == 'div':
+        return x / y
+    else:
+        return None
+
+
+def dispatch_dict(operator, x, y):
+    return {
+        'add': lambda: x + y,
+        'sub': lambda: x - y,
+        'mul': lambda: x * y,
+        'div': lambda: x / y,
+    }.get(operator, lambda: None)()
+
+
+>>> dispatch_if('mul', 2, 8)
+16
+
+>>> dispatch_dict('mul', 2, 8)
+16
+
+>>> dispatch_if('unknown', 2, 8)
+None
+
+>>> dispatch_dict('unknown', 2, 8)
+None
+
+# Python has a HTTP server built into the
+# standard library. This is super handy for
+# previewing websites.
+
+# Python 3.x
+$ python3 -m http.server
+
+# Python 2.x
+$ python -m SimpleHTTPServer 8000
+
+# (This will serve the current directory at
+#  http://localhost:8000)
+
+# Python's list comprehensions are awesome.
+
+vals = [expression 
+        for value in collection 
+        if condition]
+
+# This is equivalent to:
+
+vals = []
+for value in collection:
+    if condition:
+        vals.append(expression)
+
+# Example:
+
+>>> even_squares = [x * x for x in range(10) if not x % 2]
+>>> even_squares
+[0, 4, 16, 36, 64]
+
+#Mysql connection
+
+pip install mysql-connector 
+
+import mysql.connector
+
+word = input("Enter a word in English and press Enter: ")
+
+con = mysql.connector.connect(
+
+    user="ardit700_student", 
+
+    password = "ardit700_student", 
+
+    host="108.167.140.122", 
+
+    database = "ardit700_pm1database"
+
+)
+
+cursor = con.cursor()
+
+query = cursor.execute("SELECT * FROM Dictionary WHERE Expression = '%s'" % word)
+
+results = cursor.fetchall()
+
+if results:
+
+    for result in results:
+
+        print(result[1])
+
+else:
+
+    print("We couldn't find any results about that.")
