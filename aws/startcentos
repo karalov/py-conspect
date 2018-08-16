@@ -1,0 +1,4 @@
+./start_centos7.py
+echo "Waiting for start"
+sleep 10
+sudo ./updhosts.py

@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import string
 name=input("Account name: ").lower()[::-1]
 pwd=""
