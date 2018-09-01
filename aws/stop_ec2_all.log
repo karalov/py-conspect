@@ -2,8 +2,30 @@
 My EC2 instances: 
 
 
-Instance centos01 is already stopped
+Found running instance:
+-------------------------
+Instance ID: i-011779e66a074e790
+Instance name: centos01
+State: running
+Stopping...
+HTTPStatusCode: 200
 
-Instance karalov01 is already stopped
+Found running instance:
+-------------------------
+Instance ID: i-057a38b02c9ac66a1
+Instance name: centos02
+State: running
+Stopping...
+HTTPStatusCode: 200
 
-Instance centos02 is already stopped
+Found running instance:
+-------------------------
+Instance ID: i-04ef89bc1c7b929bd
+Instance name: centos_lb
+State: running
+Stopping...
+HTTPStatusCode: 200
+
+Instance influxdb is already stopped
+
+Instance sserver is already stopped

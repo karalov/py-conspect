@@ -1,2 +1,2 @@
 #/usr/bin/bash
-sudo ./updhosts.py
+sudo /home/dimitryk/aws/updhosts.py
